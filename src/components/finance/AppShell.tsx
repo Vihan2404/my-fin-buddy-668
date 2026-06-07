@@ -1,6 +1,6 @@
 import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { LayoutDashboard, Receipt, Wallet, PieChart, TrendingUp, Bell, Bot, LogOut, Settings } from "lucide-react";
+import { LayoutDashboard, Receipt, Wallet, PieChart, TrendingUp, Bell, Bot, LogOut, Settings as SettingsIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,7 @@ const nav = [
   { to: "/networth", label: "Net worth", icon: TrendingUp },
   { to: "/bills", label: "Bills", icon: Bell },
   { to: "/assistant", label: "AI Assistant", icon: Bot },
+  { to: "/settings", label: "Settings", icon: SettingsIcon },
 ] as const;
 
 export function AppShell({ children }: { children: ReactNode }) {

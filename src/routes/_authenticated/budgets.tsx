@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Progress } from "@/components/ui/progress";
-import { money } from "@/lib/format";
+import { useMoney } from "@/lib/format";
 import { Plus, Trash2 } from "lucide-react";
 import { startOfMonth, isAfter, parseISO } from "date-fns";
 import { toast } from "sonner";
@@ -20,6 +20,7 @@ export const Route = createFileRoute("/_authenticated/budgets")({
 });
 
 function BudgetsPage() {
+  const { fmt: money } = useMoney();
   const budgets = useQuery(qBudgets);
   const categories = useQuery(qCategories);
   const txns = useQuery(qTransactions);

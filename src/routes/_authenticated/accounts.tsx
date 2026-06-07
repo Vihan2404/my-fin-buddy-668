@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { money } from "@/lib/format";
+import { money, useCurrency } from "@/lib/format";
 import { Plus, Landmark, CreditCard, Banknote, TrendingUp, Building2, Coins, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -89,12 +89,13 @@ function AccountsPage() {
 
 function NewAccountDialog() {
   const qc = useQueryClient();
+  const userCurrency = useCurrency();
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [type, setType] = useState("bank");
   const [institution, setInstitution] = useState("");
   const [balance, setBalance] = useState("0");
-  const [currency, setCurrency] = useState("USD");
+  const [currency, setCurrency] = useState(userCurrency);
   const [isLiability, setIsLiability] = useState(false);
 
   const m = useMutation({

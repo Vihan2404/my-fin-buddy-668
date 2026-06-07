@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { money } from "@/lib/format";
+import { useMoney } from "@/lib/format";
 import { Plus, Trash2, TrendingUp, TrendingDown } from "lucide-react";
 import { toast } from "sonner";
 
@@ -17,6 +17,7 @@ export const Route = createFileRoute("/_authenticated/networth")({
 });
 
 function NetWorthPage() {
+  const { fmt: money } = useMoney();
   const accounts = useQuery(qAccounts);
   const investments = useQuery(qInvestments);
   const qc = useQueryClient();
@@ -60,8 +61,8 @@ function NetWorthPage() {
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <List title="Assets" items={assetAccs.map(a => ({ id: a.id, name: a.name, sub: a.type, value: money(Number(a.balance), a.currency) }))} />
-        <List title="Liabilities" items={liabAccs.map(a => ({ id: a.id, name: a.name, sub: a.type, value: money(Number(a.balance), a.currency), warn: true }))} />
+        <List title="Assets" items={assetAccs.map(a => ({ id: a.id, name: a.name, sub: a.type, value: money(Number(a.balance)) }))} />
+        <List title="Liabilities" items={liabAccs.map(a => ({ id: a.id, name: a.name, sub: a.type, value: money(Number(a.balance)), warn: true }))} />
       </div>
 
       <div className="rounded-xl border border-border bg-card p-5">

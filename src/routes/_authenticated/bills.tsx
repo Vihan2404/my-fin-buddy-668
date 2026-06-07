@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { money } from "@/lib/format";
+import { useMoney } from "@/lib/format";
 import { Plus, Bell, Check, Trash2 } from "lucide-react";
 import { format, parseISO, differenceInDays } from "date-fns";
 import { toast } from "sonner";
@@ -18,6 +18,7 @@ export const Route = createFileRoute("/_authenticated/bills")({
 });
 
 function BillsPage() {
+  const { fmt: money } = useMoney();
   const bills = useQuery(qBills);
   const qc = useQueryClient();
 

@@ -21,7 +21,7 @@ export const Route = createFileRoute("/_authenticated/transactions")({
 });
 
 function TransactionsPage() {
-  const { fmt: money, currency: userCurrency } = useMoney();
+  const { fmt: money } = useMoney();
   const txns = useQuery(qTransactions);
   const accounts = useQuery(qAccounts);
   const categories = useQuery(qCategories);

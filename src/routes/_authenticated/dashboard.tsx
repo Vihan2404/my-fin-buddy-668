@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { qAccounts, qTransactions, qBudgets } from "@/lib/finance-queries";
-import { money, shortMoney } from "@/lib/format";
+import { useMoney } from "@/lib/format";
 import { TrendingUp, TrendingDown, Wallet, PiggyBank, Activity } from "lucide-react";
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, BarChart, Bar, CartesianGrid, PieChart, Pie, Cell } from "recharts";
 import { format, startOfMonth, subMonths, isAfter, parseISO } from "date-fns";
@@ -12,6 +12,7 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 });
 
 function Dashboard() {
+  const { fmt: money, short: shortMoney } = useMoney();
   const accounts = useQuery(qAccounts);
   const txns = useQuery(qTransactions);
   const budgets = useQuery(qBudgets);

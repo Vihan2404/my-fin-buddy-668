@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { money } from "@/lib/format";
+import { useMoney } from "@/lib/format";
 import { Plus, Sparkles, Trash2, ArrowDownLeft, ArrowUpRight } from "lucide-react";
 import { format, parseISO } from "date-fns";
 import { toast } from "sonner";
@@ -21,6 +21,7 @@ export const Route = createFileRoute("/_authenticated/transactions")({
 });
 
 function TransactionsPage() {
+  const { fmt: money } = useMoney();
   const txns = useQuery(qTransactions);
   const accounts = useQuery(qAccounts);
   const categories = useQuery(qCategories);
@@ -79,7 +80,7 @@ function TransactionsPage() {
                   </td>
                   <td className="px-4 py-3 text-muted-foreground">{cat?.name ?? <span className="italic opacity-60">Uncategorized</span>}</td>
                   <td className="px-4 py-3 text-muted-foreground">{t.account_id ? accMap.get(t.account_id) : "—"}</td>
-                  <td className={"px-4 py-3 text-right font-tabular font-medium " + (isIncome ? "text-primary" : "")}>{isIncome ? "+" : "−"}{money(Math.abs(Number(t.amount)), t.currency)}</td>
+                  <td className={"px-4 py-3 text-right font-tabular font-medium " + (isIncome ? "text-primary" : "")}>{isIncome ? "+" : "−"}{money(Math.abs(Number(t.amount)))}</td>
                   <td className="px-2 py-3"><Button variant="ghost" size="icon" onClick={() => del.mutate(t.id)}><Trash2 className="h-4 w-4 text-muted-foreground" /></Button></td>
                 </tr>
               );

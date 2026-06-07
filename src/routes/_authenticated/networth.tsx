@@ -163,7 +163,21 @@ function NewInvestmentDialog({ accounts }: { accounts: any[] }) {
             <div className="space-y-1.5"><Label>Symbol</Label><Input required value={symbol} onChange={e => setSymbol(e.target.value)} placeholder="AAPL" /></div>
             <div className="space-y-1.5"><Label>Asset class</Label>
               <select value={assetClass} onChange={e => setAssetClass(e.target.value)} className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm">
-                <option value="stock">Stock</option><option value="mutual_fund">Mutual fund</option><option value="etf">ETF</option><option value="crypto">Crypto</option><option value="bond">Bond</option>
+                <option value="stock">Stock</option>
+                <option value="mutual_fund">Mutual fund</option>
+                <option value="sip">SIP (Systematic Investment Plan)</option>
+                <option value="etf">ETF</option>
+                <option value="index_fund">Index fund</option>
+                <option value="crypto">Crypto</option>
+                <option value="bond">Bond</option>
+                <option value="fd">Fixed deposit</option>
+                <option value="ppf">PPF / Provident fund</option>
+                <option value="nps">NPS / Pension</option>
+                <option value="reit">REIT</option>
+                <option value="real_estate">Real estate</option>
+                <option value="gold">Gold / Precious metal</option>
+                <option value="commodity">Commodity</option>
+                <option value="other">Other</option>
               </select>
             </div>
           </div>

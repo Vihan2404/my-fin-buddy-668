@@ -62,6 +62,7 @@ function SettingsPage() {
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["profile"] });
+      qc.invalidateQueries({ queryKey: ["profile", "currency"] });
       toast.success("Settings saved");
     },
     onError: (e: any) => toast.error(e.message),

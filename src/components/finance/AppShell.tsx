@@ -14,6 +14,7 @@ const nav = [
   { to: "/networth", label: "Net worth", icon: TrendingUp },
   { to: "/bills", label: "Bills", icon: Bell },
   { to: "/assistant", label: "AI Assistant", icon: Bot },
+  { to: "/settings", label: "Settings", icon: SettingsIcon },
 ] as const;
 
 export function AppShell({ children }: { children: ReactNode }) {

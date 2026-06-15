@@ -172,7 +172,7 @@ function ReportsPage() {
 function ExportCard({ icon: Icon, title, desc, cta, onClick, color }: { icon: any; title: string; desc: string; cta: string; onClick: () => void; color: string }) {
   return (
     <div className="flex flex-col rounded-2xl border border-border bg-card p-6 transition hover:border-primary/40">
-      <div className="grid h-12 w-12 place-items-center rounded-xl" style={{ background: `${color} / 20%`, backgroundColor: color, opacity: 0.95 }}>
+      <div className="grid h-12 w-12 place-items-center rounded-xl" style={{ backgroundColor: color }}>
         <Icon className="h-6 w-6 text-background" />
       </div>
       <h3 className="mt-4 font-display text-lg font-semibold">{title}</h3>

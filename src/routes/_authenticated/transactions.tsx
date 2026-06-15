@@ -177,7 +177,13 @@ function NewTransactionDialog({ accounts, categories }: { accounts: any[]; categ
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild><Button className="gap-2"><Plus className="h-4 w-4" />Add transaction</Button></DialogTrigger>
+      <input ref={fileRef} type="file" accept="image/*" capture="environment" hidden onChange={onFile} />
+      <div className="flex flex-wrap gap-2">
+        <Button variant="outline" size="lg" className="gap-2" onClick={onPickReceipt} disabled={scanLoading}>
+          <Camera className="h-4 w-4" />{scanLoading ? "Scanning…" : "Scan receipt"}
+        </Button>
+        <DialogTrigger asChild><Button size="lg" className="gap-2"><Plus className="h-4 w-4" />Add transaction</Button></DialogTrigger>
+      </div>
       <DialogContent>
         <DialogHeader><DialogTitle>New transaction</DialogTitle></DialogHeader>
         <form onSubmit={(e) => { e.preventDefault(); add.mutate(); }} className="space-y-3">

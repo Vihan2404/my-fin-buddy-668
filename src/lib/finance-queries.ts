@@ -13,6 +13,16 @@ export type Transaction = {
 export type Budget = { id: string; category_id: string | null; amount: number; period: string };
 export type Bill = { id: string; name: string; amount: number; due_date: string; recurrence: string; is_paid: boolean };
 export type Investment = { id: string; symbol: string; name: string | null; asset_class: string; quantity: number; avg_cost: number; current_price: number };
+export type Goal = { id: string; name: string; target_amount: number; current_amount: number; deadline: string | null; icon: string | null; color: string | null };
+
+export const qGoals = {
+  queryKey: ["goals"] as const,
+  queryFn: async () => {
+    const { data, error } = await supabase.from("goals").select("*").order("created_at");
+    if (error) throw error;
+    return (data ?? []) as Goal[];
+  },
+};
 
 export const qAccounts = {
   queryKey: ["accounts"] as const,

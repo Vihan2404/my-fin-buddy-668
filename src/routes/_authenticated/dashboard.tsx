@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState, useEffect } from "react";
 import { qAccounts, qTransactions, qBudgets, qGoals } from "@/lib/finance-queries";
-import { useMoney, useCurrency, currencySymbol } from "@/lib/format";
+import { useMoney, currencySymbol } from "@/lib/format";
 import { getInsights, getAiBrief } from "@/lib/insights.functions";
 import { getFxRates } from "@/lib/market.functions";
 import { TrendingUp, TrendingDown, Wallet, PiggyBank, Sparkles, AlertTriangle, Target, ArrowUpRight, ArrowDownRight, Repeat } from "lucide-react";

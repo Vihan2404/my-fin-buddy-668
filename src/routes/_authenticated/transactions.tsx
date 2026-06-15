@@ -5,13 +5,15 @@ import { supabase } from "@/integrations/supabase/client";
 import { qTransactions, qAccounts, qCategories } from "@/lib/finance-queries";
 import { useServerFn } from "@tanstack/react-start";
 import { aiCategorize } from "@/lib/ai.functions";
+import { extractReceipt } from "@/lib/receipt.functions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useMoney } from "@/lib/format";
-import { Plus, Sparkles, Trash2, ArrowDownLeft, ArrowUpRight } from "lucide-react";
+import { Plus, Sparkles, Trash2, ArrowDownLeft, ArrowUpRight, Camera } from "lucide-react";
+import { useRef } from "react";
 import { format, parseISO } from "date-fns";
 import { toast } from "sonner";
 
@@ -40,10 +42,11 @@ function TransactionsPage() {
 
   return (
     <div className="space-y-6 p-6">
-      <header className="flex items-center justify-between">
-        <div>
+      <header className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 sm:flex sm:flex-wrap sm:justify-between">
+        <div className="min-w-0">
           <p className="text-xs uppercase tracking-wider text-muted-foreground">Ledger</p>
-          <h1 className="font-display text-3xl font-semibold">Transactions</h1>
+          <h1 className="truncate font-display text-3xl font-semibold">Transactions</h1>
+          <p className="mt-1 text-sm text-muted-foreground">Scan a receipt or add transactions manually.</p>
         </div>
         <NewTransactionDialog accounts={accounts.data ?? []} categories={categories.data ?? []} />
       </header>
@@ -105,7 +108,10 @@ function NewTransactionDialog({ accounts, categories }: { accounts: any[]; categ
   const [categoryId, setCategoryId] = useState<string>("");
   const [date, setDate] = useState(format(new Date(), "yyyy-MM-dd"));
   const categorize = useServerFn(aiCategorize);
+  const scanFn = useServerFn(extractReceipt);
   const [aiLoading, setAiLoading] = useState(false);
+  const [scanLoading, setScanLoading] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
 
   const filteredCats = categories.filter(c => c.kind === type);
 
@@ -118,6 +124,34 @@ function NewTransactionDialog({ accounts, categories }: { accounts: any[]; categ
     if (!category) return toast.error("AI couldn't suggest a category");
     const match = filteredCats.find(c => c.name === category);
     if (match) { setCategoryId(match.id); toast.success(`Suggested: ${category}`); }
+  };
+
+  const onPickReceipt = () => fileRef.current?.click();
+  const onFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    if (file.size > 6_000_000) return toast.error("Image too large (max 6 MB)");
+    setScanLoading(true);
+    const dataUrl: string = await new Promise((res, rej) => {
+      const r = new FileReader(); r.onload = () => res(r.result as string); r.onerror = rej; r.readAsDataURL(file);
+    });
+    try {
+      const result = await scanFn({ data: { imageDataUrl: dataUrl } });
+      if (!result.ok) { toast.error(result.error); return; }
+      const d = result.data;
+      if (d.merchant) setDescription(d.merchant + (d.description ? ` — ${d.description}` : ""));
+      else if (d.description) setDescription(d.description);
+      if (d.amount) setAmount(String(d.amount));
+      if (d.date) setDate(d.date);
+      setType("expense");
+      setOpen(true);
+      toast.success("Receipt scanned! Review and save.");
+    } catch (err: any) {
+      toast.error(err?.message ?? "Scan failed");
+    } finally {
+      setScanLoading(false);
+    }
   };
 
   const add = useMutation({
@@ -144,7 +178,13 @@ function NewTransactionDialog({ accounts, categories }: { accounts: any[]; categ
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild><Button className="gap-2"><Plus className="h-4 w-4" />Add transaction</Button></DialogTrigger>
+      <input ref={fileRef} type="file" accept="image/*" capture="environment" hidden onChange={onFile} />
+      <div className="flex flex-wrap gap-2">
+        <Button variant="outline" size="lg" className="gap-2" onClick={onPickReceipt} disabled={scanLoading}>
+          <Camera className="h-4 w-4" />{scanLoading ? "Scanning…" : "Scan receipt"}
+        </Button>
+        <DialogTrigger asChild><Button size="lg" className="gap-2"><Plus className="h-4 w-4" />Add transaction</Button></DialogTrigger>
+      </div>
       <DialogContent>
         <DialogHeader><DialogTitle>New transaction</DialogTitle></DialogHeader>
         <form onSubmit={(e) => { e.preventDefault(); add.mutate(); }} className="space-y-3">

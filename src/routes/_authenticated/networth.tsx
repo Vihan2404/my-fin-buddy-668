@@ -8,8 +8,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useMoney } from "@/lib/format";
-import { Plus, Trash2, TrendingUp, TrendingDown } from "lucide-react";
+import { Plus, Trash2, TrendingUp, TrendingDown, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
+import { useServerFn } from "@tanstack/react-start";
+import { refreshHoldings } from "@/lib/market.functions";
 
 export const Route = createFileRoute("/_authenticated/networth")({
   head: () => ({ meta: [{ title: "Net worth — Vault" }] }),
@@ -39,14 +41,27 @@ function NetWorthPage() {
     onSuccess: () => { qc.invalidateQueries({ queryKey: ["investments"] }); toast.success("Removed"); },
   });
 
+  const refreshFn = useServerFn(refreshHoldings);
+  const refresh = useMutation({
+    mutationFn: () => refreshFn(),
+    onSuccess: (r: any) => { qc.invalidateQueries({ queryKey: ["investments"] }); toast.success(`Updated ${r?.updated ?? 0} live prices`); },
+    onError: (e: any) => toast.error(e?.message ?? "Could not fetch live prices"),
+  });
+
   return (
     <div className="space-y-6 p-6">
-      <header className="flex items-center justify-between">
-        <div>
+      <header className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 sm:flex sm:flex-wrap sm:justify-between">
+        <div className="min-w-0">
           <p className="text-xs uppercase tracking-wider text-muted-foreground">Wealth</p>
-          <h1 className="font-display text-3xl font-semibold">Net worth</h1>
+          <h1 className="truncate font-display text-3xl font-semibold">Net worth</h1>
         </div>
-        <NewInvestmentDialog accounts={accs.filter(a => a.type === "investment")} />
+        <div className="flex flex-wrap items-center gap-2">
+          <Button variant="outline" size="lg" className="gap-2" onClick={() => refresh.mutate()} disabled={refresh.isPending}>
+            <RefreshCw className={"h-4 w-4 " + (refresh.isPending ? "animate-spin" : "")} />
+            {refresh.isPending ? "Fetching live prices…" : "Refresh live prices"}
+          </Button>
+          <NewInvestmentDialog accounts={accs.filter(a => a.type === "investment")} />
+        </div>
       </header>
 
       <div className="relative overflow-hidden rounded-xl border border-border p-6" style={{ backgroundImage: "var(--gradient-card)" }}>

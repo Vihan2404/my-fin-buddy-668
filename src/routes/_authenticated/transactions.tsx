@@ -145,6 +145,7 @@ function NewTransactionDialog({ accounts, categories }: { accounts: any[]; categ
       if (d.amount) setAmount(String(d.amount));
       if (d.date) setDate(d.date);
       setType("expense");
+      setOpen(true);
       toast.success("Receipt scanned! Review and save.");
     } catch (err: any) {
       toast.error(err?.message ?? "Scan failed");

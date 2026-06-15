@@ -14,7 +14,9 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedTransactionsRouteImport } from './routes/_authenticated/transactions'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
+import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
 import { Route as AuthenticatedNetworthRouteImport } from './routes/_authenticated/networth'
+import { Route as AuthenticatedGoalsRouteImport } from './routes/_authenticated/goals'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedBudgetsRouteImport } from './routes/_authenticated/budgets'
 import { Route as AuthenticatedBillsRouteImport } from './routes/_authenticated/bills'
@@ -46,9 +48,19 @@ const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedReportsRoute = AuthenticatedReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedNetworthRoute = AuthenticatedNetworthRouteImport.update({
   id: '/networth',
   path: '/networth',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedGoalsRoute = AuthenticatedGoalsRouteImport.update({
+  id: '/goals',
+  path: '/goals',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
@@ -85,7 +97,9 @@ export interface FileRoutesByFullPath {
   '/bills': typeof AuthenticatedBillsRoute
   '/budgets': typeof AuthenticatedBudgetsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/goals': typeof AuthenticatedGoalsRoute
   '/networth': typeof AuthenticatedNetworthRoute
+  '/reports': typeof AuthenticatedReportsRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/transactions': typeof AuthenticatedTransactionsRoute
 }
@@ -97,7 +111,9 @@ export interface FileRoutesByTo {
   '/bills': typeof AuthenticatedBillsRoute
   '/budgets': typeof AuthenticatedBudgetsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/goals': typeof AuthenticatedGoalsRoute
   '/networth': typeof AuthenticatedNetworthRoute
+  '/reports': typeof AuthenticatedReportsRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/transactions': typeof AuthenticatedTransactionsRoute
 }
@@ -111,7 +127,9 @@ export interface FileRoutesById {
   '/_authenticated/bills': typeof AuthenticatedBillsRoute
   '/_authenticated/budgets': typeof AuthenticatedBudgetsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/goals': typeof AuthenticatedGoalsRoute
   '/_authenticated/networth': typeof AuthenticatedNetworthRoute
+  '/_authenticated/reports': typeof AuthenticatedReportsRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/transactions': typeof AuthenticatedTransactionsRoute
 }
@@ -125,7 +143,9 @@ export interface FileRouteTypes {
     | '/bills'
     | '/budgets'
     | '/dashboard'
+    | '/goals'
     | '/networth'
+    | '/reports'
     | '/settings'
     | '/transactions'
   fileRoutesByTo: FileRoutesByTo
@@ -137,7 +157,9 @@ export interface FileRouteTypes {
     | '/bills'
     | '/budgets'
     | '/dashboard'
+    | '/goals'
     | '/networth'
+    | '/reports'
     | '/settings'
     | '/transactions'
   id:
@@ -150,7 +172,9 @@ export interface FileRouteTypes {
     | '/_authenticated/bills'
     | '/_authenticated/budgets'
     | '/_authenticated/dashboard'
+    | '/_authenticated/goals'
     | '/_authenticated/networth'
+    | '/_authenticated/reports'
     | '/_authenticated/settings'
     | '/_authenticated/transactions'
   fileRoutesById: FileRoutesById
@@ -198,11 +222,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSettingsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/reports': {
+      id: '/_authenticated/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof AuthenticatedReportsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/networth': {
       id: '/_authenticated/networth'
       path: '/networth'
       fullPath: '/networth'
       preLoaderRoute: typeof AuthenticatedNetworthRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/goals': {
+      id: '/_authenticated/goals'
+      path: '/goals'
+      fullPath: '/goals'
+      preLoaderRoute: typeof AuthenticatedGoalsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/dashboard': {
@@ -249,7 +287,9 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedBillsRoute: typeof AuthenticatedBillsRoute
   AuthenticatedBudgetsRoute: typeof AuthenticatedBudgetsRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedGoalsRoute: typeof AuthenticatedGoalsRoute
   AuthenticatedNetworthRoute: typeof AuthenticatedNetworthRoute
+  AuthenticatedReportsRoute: typeof AuthenticatedReportsRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedTransactionsRoute: typeof AuthenticatedTransactionsRoute
 }
@@ -260,7 +300,9 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedBillsRoute: AuthenticatedBillsRoute,
   AuthenticatedBudgetsRoute: AuthenticatedBudgetsRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedGoalsRoute: AuthenticatedGoalsRoute,
   AuthenticatedNetworthRoute: AuthenticatedNetworthRoute,
+  AuthenticatedReportsRoute: AuthenticatedReportsRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedTransactionsRoute: AuthenticatedTransactionsRoute,
 }

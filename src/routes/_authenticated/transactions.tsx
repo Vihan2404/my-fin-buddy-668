@@ -12,7 +12,8 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useMoney } from "@/lib/format";
-import { Plus, Sparkles, Trash2, ArrowDownLeft, ArrowUpRight, Camera } from "lucide-react";
+import { Plus, Sparkles, Trash2, Camera, Upload } from "lucide-react";
+import * as XLSX from "xlsx";
 import { useRef } from "react";
 import { format, parseISO } from "date-fns";
 import { toast } from "sonner";
@@ -57,7 +58,10 @@ function TransactionsPage() {
           <h1 className="truncate font-display text-3xl font-semibold">Transactions</h1>
           <p className="mt-1 text-sm text-muted-foreground">Scan a receipt or add transactions manually.</p>
         </div>
-        <NewTransactionDialog accounts={accounts.data ?? []} categories={categories.data ?? []} />
+        <div className="flex flex-wrap gap-2">
+          <ImportDialog accounts={accounts.data ?? []} categories={categories.data ?? []} />
+          <NewTransactionDialog accounts={accounts.data ?? []} categories={categories.data ?? []} />
+        </div>
       </header>
 
       <div className="rounded-xl border border-border bg-card">
@@ -80,19 +84,21 @@ function TransactionsPage() {
                 <tr key={t.id} className="border-b border-border/50 last:border-0 hover:bg-accent/30">
                   <td className="px-4 py-3 text-muted-foreground">{format(parseISO(t.occurred_at), "MMM d")}</td>
                   <td className="px-4 py-3">
-                    <div className="flex items-center gap-2">
-                      <span className={"grid h-7 w-7 place-items-center rounded-full " + (isIncome ? "bg-primary/10 text-primary" : "bg-destructive/10 text-destructive")}>
-                        {isIncome ? <ArrowDownLeft className="h-3.5 w-3.5" /> : <ArrowUpRight className="h-3.5 w-3.5" />}
-                      </span>
-                      <div>
-                        <div>{t.description || t.merchant || "—"}</div>
-                        {t.merchant && t.description && <div className="text-xs text-muted-foreground">{t.merchant}</div>}
-                      </div>
+                    <div>
+                      <div>{t.description || t.merchant || "—"}</div>
+                      {t.merchant && t.description && <div className="text-xs text-muted-foreground">{t.merchant}</div>}
                     </div>
                   </td>
                   <td className="px-4 py-3 text-muted-foreground">{cat?.name ?? <span className="italic opacity-60">Uncategorized</span>}</td>
                   <td className="px-4 py-3 text-muted-foreground">{t.account_id ? accMap.get(t.account_id) : "—"}</td>
-                  <td className={"px-4 py-3 text-right font-tabular font-medium " + (isIncome ? "text-primary" : "")}>{isIncome ? "+" : "−"}{money(Math.abs(Number(t.amount)))}</td>
+                  <td className="px-4 py-3 text-right">
+                    <div className="flex items-center justify-end gap-2">
+                      <span className={"rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider " + (isIncome ? "bg-primary/15 text-primary" : "bg-destructive/15 text-destructive")} aria-label={isIncome ? "Credit" : "Debit"}>
+                        {isIncome ? "Cr" : "Dr"}
+                      </span>
+                      <span className={"font-tabular font-medium " + (isIncome ? "text-primary" : "text-foreground")}>{money(Math.abs(Number(t.amount)))}</span>
+                    </div>
+                  </td>
                   <td className="px-2 py-3"><Button variant="ghost" size="icon" aria-label="Delete transaction" onClick={() => del.mutate(t.id)}><Trash2 className="h-4 w-4 text-muted-foreground" /></Button></td>
                 </tr>
               );

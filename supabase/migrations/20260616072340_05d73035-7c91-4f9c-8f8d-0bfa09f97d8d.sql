@@ -1,0 +1,1 @@
+REVOKE EXECUTE ON FUNCTION public.apply_txn_to_balance() FROM PUBLIC, anon, authenticated;

@@ -244,3 +244,165 @@ function NewTransactionDialog({ accounts, categories }: { accounts: any[]; categ
     </Dialog>
   );
 }
+
+type ParsedRow = { date: string; amount: number; description: string; category: string; type: "expense" | "income" };
+
+function parseDate(v: any): string | null {
+  if (v == null || v === "") return null;
+  if (v instanceof Date) return format(v, "yyyy-MM-dd");
+  if (typeof v === "number") {
+    // Excel serial date
+    const d = new Date(Math.round((v - 25569) * 86400 * 1000));
+    return isNaN(d.getTime()) ? null : format(d, "yyyy-MM-dd");
+  }
+  const s = String(v).trim();
+  const d = new Date(s);
+  if (!isNaN(d.getTime())) return format(d, "yyyy-MM-dd");
+  return null;
+}
+
+function ImportDialog({ accounts, categories }: { accounts: any[]; categories: any[] }) {
+  const qc = useQueryClient();
+  const [open, setOpen] = useState(false);
+  const [accountId, setAccountId] = useState<string>("");
+  const [rows, setRows] = useState<ParsedRow[]>([]);
+  const [fileName, setFileName] = useState<string>("");
+  const [busy, setBusy] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const reset = () => { setRows([]); setFileName(""); setAccountId(""); };
+
+  const onFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    try {
+      const buf = await file.arrayBuffer();
+      const wb = XLSX.read(buf, { type: "array", cellDates: true });
+      const ws = wb.Sheets[wb.SheetNames[0]];
+      const raw: any[] = XLSX.utils.sheet_to_json(ws, { defval: "" });
+      const parsed: ParsedRow[] = [];
+      for (const r of raw) {
+        const keys = Object.fromEntries(Object.entries(r).map(([k, v]) => [String(k).toLowerCase().trim(), v]));
+        const date = parseDate(keys["date"] ?? keys["transaction date"] ?? keys["occurred_at"]);
+        const amtRaw = keys["amount"] ?? keys["amt"] ?? keys["value"];
+        const amount = typeof amtRaw === "number" ? amtRaw : parseFloat(String(amtRaw).replace(/[^0-9.\-]/g, ""));
+        if (!date || !isFinite(amount) || amount === 0) continue;
+        const typeRaw = String(keys["type"] ?? "").toLowerCase();
+        const type: "expense" | "income" = typeRaw === "income" || typeRaw === "credit" || typeRaw === "cr" || amount < 0 && false ? "income" : "expense";
+        parsed.push({
+          date,
+          amount: Math.abs(amount),
+          description: String(keys["description"] ?? keys["note"] ?? keys["memo"] ?? "").trim(),
+          category: String(keys["category"] ?? keys["cat"] ?? "").trim(),
+          type,
+        });
+      }
+      if (parsed.length === 0) return toast.error("No valid rows found. Expected columns: Date, Category, Amount, Description.");
+      setRows(parsed);
+      setFileName(file.name);
+      setOpen(true);
+    } catch (err: any) {
+      toast.error(err?.message ?? "Failed to read file");
+    }
+  };
+
+  const doImport = async () => {
+    if (!accountId) return toast.error("Pick an account to debit");
+    if (rows.length === 0) return;
+    setBusy(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Not signed in");
+
+      // Build category map (lowercased name → id), creating missing ones
+      const catByName = new Map<string, string>();
+      for (const c of categories) catByName.set(String(c.name).toLowerCase(), c.id);
+      const missing = new Set<string>();
+      for (const r of rows) if (r.category && !catByName.has(r.category.toLowerCase())) missing.add(r.category);
+      if (missing.size > 0) {
+        const toInsert = Array.from(missing).map(name => ({ user_id: user.id, name, kind: "expense" as const }));
+        const { data: created, error: ce } = await supabase.from("categories").insert(toInsert).select("id,name");
+        if (ce) throw ce;
+        for (const c of created ?? []) catByName.set(String(c.name).toLowerCase(), c.id);
+      }
+
+      const payload = rows.map(r => ({
+        user_id: user.id,
+        account_id: accountId,
+        category_id: r.category ? catByName.get(r.category.toLowerCase()) ?? null : null,
+        type: r.type,
+        amount: r.amount,
+        description: r.description || null,
+        occurred_at: new Date(r.date).toISOString(),
+      }));
+
+      // Insert in chunks of 200
+      for (let i = 0; i < payload.length; i += 200) {
+        const slice = payload.slice(i, i + 200);
+        const { error } = await supabase.from("transactions").insert(slice);
+        if (error) throw error;
+      }
+
+      qc.invalidateQueries({ queryKey: ["transactions"] });
+      qc.invalidateQueries({ queryKey: ["accounts"] });
+      qc.invalidateQueries({ queryKey: ["categories"] });
+      toast.success(`Imported ${payload.length} transactions`);
+      setOpen(false);
+      reset();
+    } catch (err: any) {
+      toast.error(err?.message ?? "Import failed");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const total = rows.reduce((s, r) => s + (r.type === "expense" ? r.amount : -r.amount), 0);
+
+  return (
+    <Dialog open={open} onOpenChange={(o) => { setOpen(o); if (!o) reset(); }}>
+      <input ref={fileRef} type="file" accept=".xlsx,.xls,.csv" hidden onChange={onFile} />
+      <Button variant="outline" size="lg" className="gap-2" onClick={() => fileRef.current?.click()}>
+        <Upload className="h-4 w-4" /> Import Excel
+      </Button>
+      <DialogContent className="max-w-2xl">
+        <DialogHeader><DialogTitle>Import from {fileName || "spreadsheet"}</DialogTitle></DialogHeader>
+        <div className="space-y-4">
+          <p className="text-sm text-muted-foreground">
+            Found <strong>{rows.length}</strong> rows. They will be added as transactions and the chosen account
+            will be debited by <strong>{total.toFixed(2)}</strong> total.
+          </p>
+          <div className="space-y-1.5">
+            <Label>Debit from account</Label>
+            <Select value={accountId} onValueChange={setAccountId}>
+              <SelectTrigger><SelectValue placeholder="Pick an account" /></SelectTrigger>
+              <SelectContent>{accounts.map(a => <SelectItem key={a.id} value={a.id}>{a.name}</SelectItem>)}</SelectContent>
+            </Select>
+          </div>
+          <div className="max-h-64 overflow-y-auto rounded-lg border border-border">
+            <table className="w-full text-xs">
+              <thead className="sticky top-0 bg-card text-left text-muted-foreground">
+                <tr><th className="px-3 py-2">Date</th><th className="px-3 py-2">Description</th><th className="px-3 py-2">Category</th><th className="px-3 py-2 text-right">Amount</th></tr>
+              </thead>
+              <tbody>
+                {rows.slice(0, 50).map((r, i) => (
+                  <tr key={i} className="border-t border-border/50">
+                    <td className="px-3 py-1.5">{r.date}</td>
+                    <td className="px-3 py-1.5">{r.description || "—"}</td>
+                    <td className="px-3 py-1.5 text-muted-foreground">{r.category || "—"}</td>
+                    <td className="px-3 py-1.5 text-right font-tabular">
+                      <span className={"mr-1 rounded px-1 py-0.5 text-[9px] font-semibold uppercase " + (r.type === "income" ? "bg-primary/15 text-primary" : "bg-destructive/15 text-destructive")}>{r.type === "income" ? "Cr" : "Dr"}</span>
+                      {r.amount.toFixed(2)}
+                    </td>
+                  </tr>
+                ))}
+                {rows.length > 50 && <tr><td colSpan={4} className="p-2 text-center text-muted-foreground">…and {rows.length - 50} more</td></tr>}
+              </tbody>
+            </table>
+          </div>
+          <Button className="w-full" size="lg" onClick={doImport} disabled={busy || !accountId}>{busy ? "Importing…" : `Import ${rows.length} transactions`}</Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}

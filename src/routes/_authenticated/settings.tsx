@@ -10,7 +10,16 @@ import { toast } from "sonner";
 import { Settings as SettingsIcon, Globe, User } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/settings")({
-  head: () => ({ meta: [{ title: "Settings — Vault" }] }),
+  head: () => ({
+    meta: [
+      { title: "Settings — Vault" },
+      { name: "description", content: "Manage your display currency, profile and account preferences." },
+      { property: "og:title", content: "Settings — Vault" },
+      { property: "og:description", content: "Currency and profile preferences." },
+      { property: "og:url", content: "https://wealthtrackpro.lovable.app/settings" },
+    ],
+    links: [{ rel: "canonical", href: "https://wealthtrackpro.lovable.app/settings" }],
+  }),
   component: SettingsPage,
 });
 

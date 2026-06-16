@@ -18,7 +18,16 @@ import { format, parseISO } from "date-fns";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/transactions")({
-  head: () => ({ meta: [{ title: "Transactions — Vault" }] }),
+  head: () => ({
+    meta: [
+      { title: "Transactions — Vault" },
+      { name: "description", content: "Log, search and categorize every transaction. Scan receipts and let AI auto-categorize your spending." },
+      { property: "og:title", content: "Transactions — Vault" },
+      { property: "og:description", content: "All your money in and out, in one searchable ledger." },
+      { property: "og:url", content: "https://wealthtrackpro.lovable.app/transactions" },
+    ],
+    links: [{ rel: "canonical", href: "https://wealthtrackpro.lovable.app/transactions" }],
+  }),
   component: TransactionsPage,
 });
 
@@ -84,7 +93,7 @@ function TransactionsPage() {
                   <td className="px-4 py-3 text-muted-foreground">{cat?.name ?? <span className="italic opacity-60">Uncategorized</span>}</td>
                   <td className="px-4 py-3 text-muted-foreground">{t.account_id ? accMap.get(t.account_id) : "—"}</td>
                   <td className={"px-4 py-3 text-right font-tabular font-medium " + (isIncome ? "text-primary" : "")}>{isIncome ? "+" : "−"}{money(Math.abs(Number(t.amount)))}</td>
-                  <td className="px-2 py-3"><Button variant="ghost" size="icon" onClick={() => del.mutate(t.id)}><Trash2 className="h-4 w-4 text-muted-foreground" /></Button></td>
+                  <td className="px-2 py-3"><Button variant="ghost" size="icon" aria-label="Delete transaction" onClick={() => del.mutate(t.id)}><Trash2 className="h-4 w-4 text-muted-foreground" /></Button></td>
                 </tr>
               );
             })}

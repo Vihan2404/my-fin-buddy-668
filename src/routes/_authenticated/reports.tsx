@@ -9,7 +9,16 @@ import { format, parseISO, startOfMonth, isAfter } from "date-fns";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/reports")({
-  head: () => ({ meta: [{ title: "Reports — Vault" }] }),
+  head: () => ({
+    meta: [
+      { title: "Reports — Vault" },
+      { name: "description", content: "Export your financial data as PDF, Excel, CSV or JSON for backups, taxes or sharing with your advisor." },
+      { property: "og:title", content: "Reports — Vault" },
+      { property: "og:description", content: "Export financial data as PDF, Excel, CSV or JSON." },
+      { property: "og:url", content: "https://wealthtrackpro.lovable.app/reports" },
+    ],
+    links: [{ rel: "canonical", href: "https://wealthtrackpro.lovable.app/reports" }],
+  }),
   component: ReportsPage,
 });
 

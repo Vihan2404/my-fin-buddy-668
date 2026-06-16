@@ -15,7 +15,16 @@ import { startOfMonth, isAfter, parseISO } from "date-fns";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/budgets")({
-  head: () => ({ meta: [{ title: "Budgets — Vault" }] }),
+  head: () => ({
+    meta: [
+      { title: "Budgets — Vault" },
+      { name: "description", content: "Set monthly category budgets and track your actual spending against them in real time." },
+      { property: "og:title", content: "Budgets — Vault" },
+      { property: "og:description", content: "Monthly budgets vs actual spending." },
+      { property: "og:url", content: "https://wealthtrackpro.lovable.app/budgets" },
+    ],
+    links: [{ rel: "canonical", href: "https://wealthtrackpro.lovable.app/budgets" }],
+  }),
   component: BudgetsPage,
 });
 
@@ -62,7 +71,7 @@ function BudgetsPage() {
                   <p className="font-medium">{cat?.name ?? "Uncategorized"}</p>
                   <p className="text-xs text-muted-foreground capitalize">{b.period}</p>
                 </div>
-                <Button variant="ghost" size="icon" onClick={() => del.mutate(b.id)}><Trash2 className="h-4 w-4" /></Button>
+                <Button variant="ghost" size="icon" aria-label="Delete budget" onClick={() => del.mutate(b.id)}><Trash2 className="h-4 w-4" /></Button>
               </div>
               <div className="mt-4 flex items-baseline justify-between font-tabular">
                 <span className={"text-2xl font-semibold " + (over ? "text-destructive" : "")}>{money(spent)}</span>

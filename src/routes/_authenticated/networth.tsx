@@ -14,7 +14,16 @@ import { useServerFn } from "@tanstack/react-start";
 import { refreshHoldings } from "@/lib/market.functions";
 
 export const Route = createFileRoute("/_authenticated/networth")({
-  head: () => ({ meta: [{ title: "Net worth — Vault" }] }),
+  head: () => ({
+    meta: [
+      { title: "Net worth — Vault" },
+      { name: "description", content: "See your assets minus liabilities, track investments and refresh live stock prices for real-time P&L." },
+      { property: "og:title", content: "Net worth — Vault" },
+      { property: "og:description", content: "Assets, liabilities and live investment P&L." },
+      { property: "og:url", content: "https://wealthtrackpro.lovable.app/networth" },
+    ],
+    links: [{ rel: "canonical", href: "https://wealthtrackpro.lovable.app/networth" }],
+  }),
   component: NetWorthPage,
 });
 
@@ -102,7 +111,7 @@ function NetWorthPage() {
                     <td className="px-3 py-2 text-right font-tabular">{money(Number(i.current_price))}</td>
                     <td className="px-3 py-2 text-right font-tabular font-semibold">{money(value)}</td>
                     <td className={"px-3 py-2 text-right font-tabular " + (pnl >= 0 ? "text-primary" : "text-destructive")}>{pnl >= 0 ? "+" : ""}{money(pnl)}</td>
-                    <td className="px-2 py-2"><Button variant="ghost" size="icon" onClick={() => del.mutate(i.id)}><Trash2 className="h-4 w-4" /></Button></td>
+                    <td className="px-2 py-2"><Button variant="ghost" size="icon" aria-label="Delete item" onClick={() => del.mutate(i.id)}><Trash2 className="h-4 w-4" /></Button></td>
                   </tr>
                 );
               })}

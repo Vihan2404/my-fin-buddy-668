@@ -10,7 +10,16 @@ import { Wallet } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/auth")({
-  head: () => ({ meta: [{ title: "Sign in — Vault" }] }),
+  head: () => ({
+    meta: [
+      { title: "Sign in — Vault" },
+      { name: "description", content: "Sign in to Vault or create a free account to start tracking expenses, budgets, and net worth." },
+      { property: "og:title", content: "Sign in — Vault" },
+      { property: "og:description", content: "Sign in to Vault or create a free account." },
+      { property: "og:url", content: "https://wealthtrackpro.lovable.app/auth" },
+    ],
+    links: [{ rel: "canonical", href: "https://wealthtrackpro.lovable.app/auth" }],
+  }),
   component: AuthPage,
 });
 
@@ -69,6 +78,7 @@ function AuthPage() {
               <TabsTrigger value="signup">Create account</TabsTrigger>
             </TabsList>
             <TabsContent value="signin" className="mt-4">
+              <h1 className="mb-3 text-lg font-semibold">Sign in to Vault</h1>
               <form onSubmit={signIn} className="space-y-3">
                 <div className="space-y-1.5"><Label>Email</Label><Input type="email" required value={email} onChange={e => setEmail(e.target.value)} /></div>
                 <div className="space-y-1.5"><Label>Password</Label><Input type="password" required value={password} onChange={e => setPassword(e.target.value)} /></div>
@@ -76,6 +86,7 @@ function AuthPage() {
               </form>
             </TabsContent>
             <TabsContent value="signup" className="mt-4">
+              <h1 className="mb-3 text-lg font-semibold">Create your Vault account</h1>
               <form onSubmit={signUp} className="space-y-3">
                 <div className="space-y-1.5"><Label>Name</Label><Input required value={name} onChange={e => setName(e.target.value)} /></div>
                 <div className="space-y-1.5"><Label>Email</Label><Input type="email" required value={email} onChange={e => setEmail(e.target.value)} /></div>

@@ -8,7 +8,16 @@ import { Send, Sparkles, Bot, User } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/assistant")({
-  head: () => ({ meta: [{ title: "Assistant — Vault" }] }),
+  head: () => ({
+    meta: [
+      { title: "AI Assistant — Vault" },
+      { name: "description", content: "Ask plain-English questions about your money: spending by category, monthly trends, anomalies and more." },
+      { property: "og:title", content: "AI Assistant — Vault" },
+      { property: "og:description", content: "Natural-language finance assistant." },
+      { property: "og:url", content: "https://wealthtrackpro.lovable.app/assistant" },
+    ],
+    links: [{ rel: "canonical", href: "https://wealthtrackpro.lovable.app/assistant" }],
+  }),
   component: AssistantPage,
 });
 

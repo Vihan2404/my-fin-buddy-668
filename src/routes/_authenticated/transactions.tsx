@@ -289,7 +289,7 @@ function ImportDialog({ accounts, categories }: { accounts: any[]; categories: a
         const amount = typeof amtRaw === "number" ? amtRaw : parseFloat(String(amtRaw).replace(/[^0-9.\-]/g, ""));
         if (!date || !isFinite(amount) || amount === 0) continue;
         const typeRaw = String(keys["type"] ?? "").toLowerCase();
-        const type: "expense" | "income" = typeRaw === "income" || typeRaw === "credit" || typeRaw === "cr" || amount < 0 && false ? "income" : "expense";
+        const type: "expense" | "income" = (typeRaw === "income" || typeRaw === "credit" || typeRaw === "cr") ? "income" : "expense";
         parsed.push({
           date,
           amount: Math.abs(amount),

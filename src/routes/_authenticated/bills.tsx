@@ -13,7 +13,16 @@ import { format, parseISO, differenceInDays } from "date-fns";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/bills")({
-  head: () => ({ meta: [{ title: "Bills — Vault" }] }),
+  head: () => ({
+    meta: [
+      { title: "Bills — Vault" },
+      { name: "description", content: "Schedule recurring bill reminders and never miss a due date." },
+      { property: "og:title", content: "Bills — Vault" },
+      { property: "og:description", content: "Recurring bill reminders." },
+      { property: "og:url", content: "https://wealthtrackpro.lovable.app/bills" },
+    ],
+    links: [{ rel: "canonical", href: "https://wealthtrackpro.lovable.app/bills" }],
+  }),
   component: BillsPage,
 });
 
@@ -65,7 +74,7 @@ function BillsPage() {
               <div className="flex items-center gap-3">
                 <span className="font-tabular text-lg font-semibold">{money(Number(b.amount))}</span>
                 <Button size="sm" variant={b.is_paid ? "outline" : "default"} onClick={() => togglePaid.mutate({ id: b.id, is_paid: !b.is_paid })}>{b.is_paid ? "Mark unpaid" : "Mark paid"}</Button>
-                <Button variant="ghost" size="icon" onClick={() => del.mutate(b.id)}><Trash2 className="h-4 w-4" /></Button>
+                <Button variant="ghost" size="icon" aria-label="Delete bill" onClick={() => del.mutate(b.id)}><Trash2 className="h-4 w-4" /></Button>
               </div>
             </div>
           );

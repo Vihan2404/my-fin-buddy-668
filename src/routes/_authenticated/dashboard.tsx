@@ -13,7 +13,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
-  head: () => ({ meta: [{ title: "Dashboard — Vault" }] }),
+  head: () => ({
+    meta: [
+      { title: "Dashboard — Vault" },
+      { name: "description", content: "Your financial dashboard: net worth, recent activity, AI briefings, anomalies and top spending categories at a glance." },
+      { property: "og:title", content: "Dashboard — Vault" },
+      { property: "og:description", content: "Net worth, AI insights and spending overview." },
+      { property: "og:url", content: "https://wealthtrackpro.lovable.app/dashboard" },
+    ],
+    links: [{ rel: "canonical", href: "https://wealthtrackpro.lovable.app/dashboard" }],
+  }),
   component: Dashboard,
 });
 

@@ -14,7 +14,16 @@ import { toast } from "sonner";
 import { format, parseISO, differenceInDays } from "date-fns";
 
 export const Route = createFileRoute("/_authenticated/goals")({
-  head: () => ({ meta: [{ title: "Goals — Vault" }] }),
+  head: () => ({
+    meta: [
+      { title: "Goals — Vault" },
+      { name: "description", content: "Create savings goals, track progress and stay on pace with deadline countdowns." },
+      { property: "og:title", content: "Goals — Vault" },
+      { property: "og:description", content: "Savings goals and progress tracker." },
+      { property: "og:url", content: "https://wealthtrackpro.lovable.app/goals" },
+    ],
+    links: [{ rel: "canonical", href: "https://wealthtrackpro.lovable.app/goals" }],
+  }),
   component: GoalsPage,
 });
 

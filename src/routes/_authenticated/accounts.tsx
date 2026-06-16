@@ -14,7 +14,16 @@ import { Plus, Landmark, CreditCard, Banknote, TrendingUp, Building2, Coins, Tra
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/accounts")({
-  head: () => ({ meta: [{ title: "Accounts — Vault" }] }),
+  head: () => ({
+    meta: [
+      { title: "Accounts — Vault" },
+      { name: "description", content: "Manage bank accounts, credit cards, cash wallets, loans and investment accounts in one place." },
+      { property: "og:title", content: "Accounts — Vault" },
+      { property: "og:description", content: "Bank, cards, cash and investment accounts in one place." },
+      { property: "og:url", content: "https://wealthtrackpro.lovable.app/accounts" },
+    ],
+    links: [{ rel: "canonical", href: "https://wealthtrackpro.lovable.app/accounts" }],
+  }),
   component: AccountsPage,
 });
 
@@ -68,7 +77,7 @@ function AccountsPage() {
                     <p className="text-xs text-muted-foreground">{a.institution || meta.label}</p>
                   </div>
                 </div>
-                <Button variant="ghost" size="icon" className="opacity-0 group-hover:opacity-100" onClick={() => del.mutate(a.id)}><Trash2 className="h-4 w-4" /></Button>
+                <Button variant="ghost" size="icon" aria-label="Delete account" className="opacity-0 group-hover:opacity-100" onClick={() => del.mutate(a.id)}><Trash2 className="h-4 w-4" /></Button>
               </div>
               <p className={"mt-6 font-tabular text-2xl font-semibold " + (a.is_liability ? "text-warning" : "")}>
                 {a.is_liability ? "−" : ""}{money(Number(a.balance), a.currency)}

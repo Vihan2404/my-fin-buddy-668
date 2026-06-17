@@ -16,9 +16,9 @@ import { refreshHoldings } from "@/lib/market.functions";
 export const Route = createFileRoute("/_authenticated/networth")({
   head: () => ({
     meta: [
-      { title: "Net worth — Vault" },
+      { title: "Net worth — FinSpark" },
       { name: "description", content: "See your assets minus liabilities, track investments and refresh live stock prices for real-time P&L." },
-      { property: "og:title", content: "Net worth — Vault" },
+      { property: "og:title", content: "Net worth — FinSpark" },
       { property: "og:description", content: "Assets, liabilities and live investment P&L." },
       { property: "og:url", content: "https://wealthtrackpro.lovable.app/networth" },
     ],

@@ -21,9 +21,9 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/_authenticated/transactions")({
   head: () => ({
     meta: [
-      { title: "Transactions — Vault" },
+      { title: "Transactions — FinSpark" },
       { name: "description", content: "Log, search and categorize every transaction. Scan receipts and let AI auto-categorize your spending." },
-      { property: "og:title", content: "Transactions — Vault" },
+      { property: "og:title", content: "Transactions — FinSpark" },
       { property: "og:description", content: "All your money in and out, in one searchable ledger." },
       { property: "og:url", content: "https://wealthtrackpro.lovable.app/transactions" },
     ],

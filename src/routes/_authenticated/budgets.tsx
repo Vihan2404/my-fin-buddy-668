@@ -17,9 +17,9 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/_authenticated/budgets")({
   head: () => ({
     meta: [
-      { title: "Budgets — Vault" },
+      { title: "Budgets — FinSpark" },
       { name: "description", content: "Set monthly category budgets and track your actual spending against them in real time." },
-      { property: "og:title", content: "Budgets — Vault" },
+      { property: "og:title", content: "Budgets — FinSpark" },
       { property: "og:description", content: "Monthly budgets vs actual spending." },
       { property: "og:url", content: "https://wealthtrackpro.lovable.app/budgets" },
     ],

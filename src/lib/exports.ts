@@ -82,7 +82,7 @@ export function downloadPDF(filename: string, opts: {
       didDrawPage: (data) => {
         doc.setFontSize(8);
         doc.setTextColor(140);
-        doc.text(`Vault — ${opts.title}`, 40, doc.internal.pageSize.getHeight() - 20);
+        doc.text(`FinSpark — ${opts.title}`, 40, doc.internal.pageSize.getHeight() - 20);
         doc.text(`Page ${data.pageNumber}`, W - 60, doc.internal.pageSize.getHeight() - 20);
       },
       margin: { top: 90 },

@@ -35,7 +35,7 @@ export const aiChat = createServerFn({ method: "POST" })
       budgets: (budgets ?? []).map((b) => ({ amount: Number(b.amount), category: b.category_id ? catMap.get(b.category_id) : null, period: b.period })),
     };
 
-    const system = `You are Vault, an AI personal-finance assistant. Use ONLY the user's financial snapshot below to answer.
+    const system = `You are FinSpark, an AI personal-finance assistant. Use ONLY the user's financial snapshot below to answer.
 Be concise, friendly, and quantitative. Use the user's currency. Format money like $1,234.56. If data is insufficient, say so briefly.
 
 USER FINANCIAL SNAPSHOT (JSON):

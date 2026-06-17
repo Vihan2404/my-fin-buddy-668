@@ -15,9 +15,9 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/_authenticated/bills")({
   head: () => ({
     meta: [
-      { title: "Bills — Vault" },
+      { title: "Bills — FinSpark" },
       { name: "description", content: "Schedule recurring bill reminders and never miss a due date." },
-      { property: "og:title", content: "Bills — Vault" },
+      { property: "og:title", content: "Bills — FinSpark" },
       { property: "og:description", content: "Recurring bill reminders." },
       { property: "og:url", content: "https://wealthtrackpro.lovable.app/bills" },
     ],

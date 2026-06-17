@@ -5,12 +5,12 @@ import { Button } from "@/components/ui/button";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Vault — Personal Finance OS" },
+      { title: "FinSpark — Personal Finance OS" },
       { name: "description", content: "Track expenses, net worth, investments, budgets and bills with AI insights and natural-language queries." },
-      { property: "og:title", content: "Vault — Personal Finance OS" },
+      { property: "og:title", content: "FinSpark — Personal Finance OS" },
       { property: "og:description", content: "Your money, all in one beautifully dark place." },
       { property: "og:url", content: "https://wealthtrackpro.lovable.app/" },
-      { name: "twitter:title", content: "Vault — Personal Finance OS" },
+      { name: "twitter:title", content: "FinSpark — Personal Finance OS" },
       { name: "twitter:description", content: "Your money, all in one beautifully dark place." },
       { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/a2993958-7a25-4a22-914a-2794e99d3ae9/id-preview-f0e94490--d76ad77c-8db1-432c-9172-9f8ef79446e6.lovable.app-1780830396539.png" },
       { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/a2993958-7a25-4a22-914a-2794e99d3ae9/id-preview-f0e94490--d76ad77c-8db1-432c-9172-9f8ef79446e6.lovable.app-1780830396539.png" },
@@ -22,7 +22,7 @@ export const Route = createFileRoute("/")({
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "SoftwareApplication",
-          name: "Vault",
+          name: "FinSpark",
           applicationCategory: "FinanceApplication",
           operatingSystem: "Web",
           url: "https://wealthtrackpro.lovable.app/",
@@ -35,7 +35,7 @@ export const Route = createFileRoute("/")({
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "Organization",
-          name: "Vault",
+          name: "FinSpark",
           url: "https://wealthtrackpro.lovable.app/",
         }),
       },
@@ -55,7 +55,7 @@ function Landing() {
           <div className="grid h-8 w-8 place-items-center rounded-lg" style={{ background: "var(--gradient-primary)" }}>
             <Wallet className="h-4 w-4 text-primary-foreground" />
           </div>
-          <span className="font-display text-lg font-semibold">Vault</span>
+          <span className="font-display text-lg font-semibold">FinSpark</span>
         </div>
         <nav className="flex items-center gap-2">
           <Link to="/auth"><Button variant="ghost" size="sm">Sign in</Button></Link>
@@ -100,7 +100,7 @@ function Landing() {
       </main>
 
       <footer className="border-t border-border py-8 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} Vault — Your money, all in one place.
+        © {new Date().getFullYear()} FinSpark — Your money, all in one place.
       </footer>
     </div>
   );

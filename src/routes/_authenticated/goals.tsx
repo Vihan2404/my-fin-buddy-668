@@ -16,9 +16,9 @@ import { format, parseISO, differenceInDays } from "date-fns";
 export const Route = createFileRoute("/_authenticated/goals")({
   head: () => ({
     meta: [
-      { title: "Goals — Vault" },
+      { title: "Goals — FinSpark" },
       { name: "description", content: "Create savings goals, track progress and stay on pace with deadline countdowns." },
-      { property: "og:title", content: "Goals — Vault" },
+      { property: "og:title", content: "Goals — FinSpark" },
       { property: "og:description", content: "Savings goals and progress tracker." },
       { property: "og:url", content: "https://wealthtrackpro.lovable.app/goals" },
     ],

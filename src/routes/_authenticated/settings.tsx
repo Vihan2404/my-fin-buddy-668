@@ -12,9 +12,9 @@ import { Settings as SettingsIcon, Globe, User } from "lucide-react";
 export const Route = createFileRoute("/_authenticated/settings")({
   head: () => ({
     meta: [
-      { title: "Settings — Vault" },
+      { title: "Settings — FinSpark" },
       { name: "description", content: "Manage your display currency, profile and account preferences." },
-      { property: "og:title", content: "Settings — Vault" },
+      { property: "og:title", content: "Settings — FinSpark" },
       { property: "og:description", content: "Currency and profile preferences." },
       { property: "og:url", content: "https://wealthtrackpro.lovable.app/settings" },
     ],

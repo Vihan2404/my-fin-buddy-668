@@ -41,7 +41,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             <Wallet className="h-5 w-5 text-primary-foreground" />
           </div>
           <div>
-            <div className="font-display text-xl font-bold">Vault</div>
+            <div className="font-display text-xl font-bold">FinSpark</div>
             <div className="text-xs text-muted-foreground">Personal Finance OS</div>
           </div>
         </Link>
@@ -83,7 +83,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             <div className="grid h-9 w-9 place-items-center rounded-lg" style={{ background: "var(--gradient-primary)" }}>
               <Wallet className="h-4 w-4 text-primary-foreground" />
             </div>
-            <span className="font-display text-lg font-bold">Vault</span>
+            <span className="font-display text-lg font-bold">FinSpark</span>
           </Link>
           <Button variant="ghost" size="icon" onClick={() => setMobileOpen(true)} aria-label="Open menu"><Menu className="h-6 w-6" /></Button>
         </div>

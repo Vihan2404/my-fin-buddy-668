@@ -11,9 +11,9 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/_authenticated/reports")({
   head: () => ({
     meta: [
-      { title: "Reports — Vault" },
+      { title: "Reports — FinSpark" },
       { name: "description", content: "Export your financial data as PDF, Excel, CSV or JSON for backups, taxes or sharing with your advisor." },
-      { property: "og:title", content: "Reports — Vault" },
+      { property: "og:title", content: "Reports — FinSpark" },
       { property: "og:description", content: "Export financial data as PDF, Excel, CSV or JSON." },
       { property: "og:url", content: "https://wealthtrackpro.lovable.app/reports" },
     ],
@@ -152,7 +152,7 @@ function ReportsPage() {
         <ExportCard
           icon={FileJson}
           title="JSON Backup"
-          desc="Full machine-readable backup of all your Vault data."
+          desc="Full machine-readable backup of all your FinSpark data."
           cta="Download JSON"
           onClick={exportJSON}
           color="oklch(0.72 0.15 230)"

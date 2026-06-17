@@ -12,10 +12,10 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Sign in — Vault" },
-      { name: "description", content: "Sign in to Vault or create a free account to start tracking expenses, budgets, and net worth." },
-      { property: "og:title", content: "Sign in — Vault" },
-      { property: "og:description", content: "Sign in to Vault or create a free account." },
+      { title: "Sign in — FinSpark" },
+      { name: "description", content: "Sign in to FinSpark or create a free account to start tracking expenses, budgets, and net worth." },
+      { property: "og:title", content: "Sign in — FinSpark" },
+      { property: "og:description", content: "Sign in to FinSpark or create a free account." },
       { property: "og:url", content: "https://wealthtrackpro.lovable.app/auth" },
     ],
     links: [{ rel: "canonical", href: "https://wealthtrackpro.lovable.app/auth" }],
@@ -69,7 +69,7 @@ function AuthPage() {
           <div className="grid h-9 w-9 place-items-center rounded-lg" style={{ background: "var(--gradient-primary)" }}>
             <Wallet className="h-4 w-4 text-primary-foreground" />
           </div>
-          <span className="font-display text-xl font-semibold">Vault</span>
+          <span className="font-display text-xl font-semibold">FinSpark</span>
         </Link>
         <div className="rounded-2xl border border-border bg-card p-6 shadow-2xl">
           <Tabs defaultValue="signin">
@@ -78,7 +78,7 @@ function AuthPage() {
               <TabsTrigger value="signup">Create account</TabsTrigger>
             </TabsList>
             <TabsContent value="signin" className="mt-4">
-              <h1 className="mb-3 text-lg font-semibold">Sign in to Vault</h1>
+              <h1 className="mb-3 text-lg font-semibold">Sign in to FinSpark</h1>
               <form onSubmit={signIn} className="space-y-3">
                 <div className="space-y-1.5"><Label>Email</Label><Input type="email" required value={email} onChange={e => setEmail(e.target.value)} /></div>
                 <div className="space-y-1.5"><Label>Password</Label><Input type="password" required value={password} onChange={e => setPassword(e.target.value)} /></div>
@@ -86,7 +86,7 @@ function AuthPage() {
               </form>
             </TabsContent>
             <TabsContent value="signup" className="mt-4">
-              <h1 className="mb-3 text-lg font-semibold">Create your Vault account</h1>
+              <h1 className="mb-3 text-lg font-semibold">Create your FinSpark account</h1>
               <form onSubmit={signUp} className="space-y-3">
                 <div className="space-y-1.5"><Label>Name</Label><Input required value={name} onChange={e => setName(e.target.value)} /></div>
                 <div className="space-y-1.5"><Label>Email</Label><Input type="email" required value={email} onChange={e => setEmail(e.target.value)} /></div>

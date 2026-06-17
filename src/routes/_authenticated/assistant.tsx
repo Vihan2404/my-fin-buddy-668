@@ -10,9 +10,9 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/_authenticated/assistant")({
   head: () => ({
     meta: [
-      { title: "AI Assistant — Vault" },
+      { title: "AI Assistant — FinSpark" },
       { name: "description", content: "Ask plain-English questions about your money: spending by category, monthly trends, anomalies and more." },
-      { property: "og:title", content: "AI Assistant — Vault" },
+      { property: "og:title", content: "AI Assistant — FinSpark" },
       { property: "og:description", content: "Natural-language finance assistant." },
       { property: "og:url", content: "https://wealthtrackpro.lovable.app/assistant" },
     ],
@@ -33,7 +33,7 @@ const SUGGESTIONS = [
 function AssistantPage() {
   const chat = useServerFn(aiChat);
   const [messages, setMessages] = useState<Msg[]>([
-    { role: "assistant", content: "Hi — I'm Vault. Ask me anything about your money. I can analyze spending, suggest budgets, and spot trends." },
+    { role: "assistant", content: "Hi — I'm FinSpark. Ask me anything about your money. I can analyze spending, suggest budgets, and spot trends." },
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
